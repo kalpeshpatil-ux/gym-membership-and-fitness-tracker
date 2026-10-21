@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Gym Membership and Fitness Tracker - Complete Object-Oriented Programming (OOP) Demonstration Web Application in C++ Architecture.">
+  <title>FitZone | Gym Membership & Fitness Tracker (OOP System)</title>
+  
+  <!-- Modern Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js for Biometric & Leaderboard Visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Ambient background glow elements -->
+  <div class="ambient-glow glow-gold" aria-hidden="true"></div>
+  <div class="ambient-glow glow-cyan" aria-hidden="true"></div>
+  <div class="ambient-glow glow-purple" aria-hidden="true"></div>
+
+  <!-- Main Container -->
+  <div class="app-container">
+
+    <!-- Top Navigation Bar -->
+    <header class="top-navbar">
+      <div class="brand-group">
+        <div class="brand-icon">⚡</div>
+        <div class="brand-titles">
+          <h1>FitZone Fitness Club</h1>
+          <p>Gym Membership &amp; Biometric Fitness Tracker — <strong>OOP Project Model</strong></p>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <button id="btn-quick-register" class="btn btn-primary">
+          <span>➕</span> Register Member
+        </button>
+        <button id="btn-quick-workout" class="btn btn-emerald">
+          <span>🔥</span> Log Workout
+        </button>
+        <button id="btn-quick-export" class="btn btn-secondary" title="Export complete gym report to file">
+          <span>📥</span> Export Report
+        </button>
+      </div>
+    </header>
+
+    <!-- Key Stats Metrics Row -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon-wrap icon-gold">🏋️‍♂️</div>
+        <div class="stat-meta">
+          <div class="label">Active Members</div>
+          <div class="value" id="stat-active-members">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap icon-cyan">🥊</div>
+        <div class="stat-meta">
+          <div class="label">Certified Trainers</div>
+          <div class="value" id="stat-total-trainers">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap icon-emerald">🔥</div>
+        <div class="stat-meta">
+          <div class="label">Total Calories Burned</div>
+          <div class="value" id="stat-total-calories">0 kcal</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap icon-purple">💳</div>
+        <div class="stat-meta">
+          <div class="label">Total Revenue</div>
+          <div class="value" id="stat-total-revenue">₹0</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <nav class="tab-navigation">
+      <button class="tab-btn active" data-tab="tab-members">
+        <span>👥</span> Members Directory
+      </button>
+      <button class="tab-btn" data-tab="tab-tracker">
+        <span>🔥</span> Fitness Tracker
+      </button>
+      <button class="tab-btn" data-tab="tab-leaderboard">
+        <span>🏆</span> Calorie Leaderboard
+      </button>
+      <button class="tab-btn" data-tab="tab-trainers">
+        <span>🥊</span> Trainers Roster
+      </button>
+      <button class="tab-btn" data-tab="tab-analytics">
+        <span>📊</span> Revenue Analytics
+      </button>
+      <button class="tab-btn" data-tab="tab-oop-guide">
+        <span>🎓</span> OOP Viva Guide
+      </button>
+    </nav>
+
+    <!-- Tab 1: Members Directory -->
+    <section id="tab-members" class="tab-pane active">
+      <div class="section-toolbar">
+        <div class="search-filter-box">
+          <input type="text" id="member-search-input" class="input-field" placeholder="🔍 Search member by name or ID...">
+          <select id="member-plan-filter" class="select-field">
+            <option value="ALL">All Plans</option>
+            <option value="Platinum">Platinum (₹3,500/m)</option>
+            <option value="Premium">Premium (₹2,000/m)</option>
+            <option value="Basic">Basic (₹1,000/m)</option>
+          </select>
+          <select id="member-status-filter" class="select-field">
+            <option value="ALL">All Status</option>
+            <option value="ACTIVE">Active Only</option>
+            <option value="EXPIRED">Expired Only</option>
+          </select>
+        </div>
+        <button id="btn-add-member-top" class="btn btn-primary">
+          <span>➕</span> New Member Registration
+        </button>
+      </div>
+
+      <!-- Member Grid Container -->
+      <div id="members-grid-container" class="members-grid">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </section>
+
+    <!-- Tab 2: Fitness Tracker & Workout Logger -->
+    <section id="tab-tracker" class="tab-pane">
+      <div class="tracker-layout">
+        
+        <!-- Left: Log Workout Form -->
+        <div class="panel-card">
+          <h3><span>⚡</span> Log Exercise Session</h3>
+          <form id="workout-form">
+            <div class="form-group">
+              <label for="workout-member-select">Select Member:</label>
+              <select id="workout-member-select" class="input-field" required>
+                <!-- Populated by app.js -->
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Select Exercise Type (Scientific MET Value):</label>
+              <div class="exercise-picker-grid">
+                <div class="exercise-radio-card">
+                  <input type="radio" name="exercise" id="ex-run" value="1" data-met="9.8" checked>
+                  <label for="ex-run" class="exercise-label">
+                    <span class="icon">🏃</span>
+                    <span class="name">Running</span>
+                    <span class="met">9.8 MET</span>
+                  </label>
+                </div>
+                <div class="exercise-radio-card">
+                  <input type="radio" name="exercise" id="ex-cycle" value="2" data-met="7.5">
+                  <label for="ex-cycle" class="exercise-label">
+                    <span class="icon">🚴</span>
+                    <span class="name">Cycling</span>
+                    <span class="met">7.5 MET</span>
+                  </label>
+                </div>
+                <div class="exercise-radio-card">
+                  <input type="radio" name="exercise" id="ex-walk" value="3" data-met="3.5">
+                  <label for="ex-walk" class="exercise-label">
+                    <span class="icon">🚶</span>
+                    <span class="name">Walking</span>
+                    <span class="met">3.5 MET</span>
+                  </label>
+                </div>
+                <div class="exercise-radio-card">
+                  <input type="radio" name="exercise" id="ex-swim" value="4" data-met="8.0">
+                  <label for="ex-swim" class="exercise-label">
+                    <span class="icon">🏊</span>
+                    <span class="name">Swimming</span>
+                    <span class="met">8.0 MET</span>
+                  </label>
+                </div>
+                <div class="exercise-radio-card">
+                  <input type="radio" name="exercise" id="ex-lift" value="5" data-met="6.0">
+                  <label for="ex-lift" class="exercise-label">
+                    <span class="icon">🏋️</span>
+                    <span class="name">Weightlifting</span>
+                    <span class="met">6.0 MET</span>
+                  </label>
+                </div>
+                <div class="exercise-radio-card">
+                  <input type="radio" name="exercise" id="ex-yoga" value="6" data-met="2.5">
+                  <label for="ex-yoga" class="exercise-label">
+                    <span class="icon">🧘</span>
+                    <span class="name">Yoga</span>
+                    <span class="met">2.5 MET</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="workout-duration-range">Duration: <strong id="duration-display">45 mins</strong></label>
+              <input type="range" id="workout-duration-range" min="10" max="180" step="5" value="45" class="input-field" style="padding: 4px 0;">
+            </div>
+
+            <!-- Calorie Live Estimation Box -->
+            <div class="calorie-preview-box">
+              <div class="sub">Estimated Energy Burn</div>
+              <div class="burn-value" id="estimated-calories-burn">441.0 kcal</div>
+              <div class="sub" style="font-size: 0.68rem; margin-top: 4px;">Formula: MET × Weight (kg) × (Duration / 60)</div>
+            </div>
+
+            <button type="submit" class="btn btn-emerald" style="width: 100%; justify-content: center;">
+              <span>🔥</span> Record Workout &amp; Update Stats
+            </button>
+          </form>
+
+          <hr style="border: 0; border-top: 1px solid var(--border-subtle); margin: 24px 0;">
+
+          <!-- Update Weight Quick Box -->
+          <h3><span>⚖️</span> Update Member Weight</h3>
+          <form id="update-weight-form">
+            <div class="form-group">
+              <label for="weight-member-select">Select Member:</label>
+              <select id="weight-member-select" class="input-field" required></select>
+            </div>
+            <div class="form-group">
+              <label for="new-weight-input">New Weight in kg (30 - 200):</label>
+              <input type="number" id="new-weight-input" class="input-field" min="30" max="200" step="0.5" value="70.0" required>
+            </div>
+            <button type="submit" class="btn btn-cyan" style="width: 100%; justify-content: center;">
+              Update Weight &amp; Recalculate BMI
+            </button>
+          </form>
+        </div>
+
+        <!-- Right: Member Biometrics & Progress -->
+        <div class="panel-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+            <h3><span>📈</span> Biometric Progress &amp; Workout Log</h3>
+            <select id="progress-member-select" class="select-field" style="max-width: 240px;"></select>
+          </div>
+
+          <!-- Member Progress Summary Pills -->
+          <div id="progress-summary-pills" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 20px;">
+            <!-- Rendered by app.js -->
+          </div>
+
+          <!-- Weight History Chart -->
+          <div style="height: 240px; margin-bottom: 24px;">
+            <canvas id="weight-progress-chart"></canvas>
+          </div>
+
+          <!-- Workout History Table -->
+          <h4 style="font-size: 0.95rem; margin-bottom: 10px; color: var(--text-muted);">Recent Workout Sessions</h4>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+              <thead>
+                <tr style="border-bottom: 1px solid var(--border-bright); color: var(--text-muted);">
+                  <th style="padding: 8px 12px;">Date</th>
+                  <th style="padding: 8px 12px;">Exercise</th>
+                  <th style="padding: 8px 12px;">Duration</th>
+                  <th style="padding: 8px 12px; text-align: right;">Calories</th>
+                </tr>
+              </thead>
+              <tbody id="workout-history-tbody">
+                <!-- Rendered by app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Tab 3: Calorie Leaderboard -->
+    <section id="tab-leaderboard" class="tab-pane">
+      <div class="panel-card" style="max-width: 900px; margin: 0 auto;">
+        <h3><span>🏆</span> Top Fitness Performers (Total Calories Burned)</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">
+          Rankings are calculated dynamically based on authenticated workout sessions logged by each gym member.
+        </p>
+        <div id="leaderboard-container" class="leaderboard-list">
+          <!-- Rendered by app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 4: Trainers Roster -->
+    <section id="tab-trainers" class="tab-pane">
+      <div class="section-toolbar">
+        <h2 style="font-family: var(--font-display); font-size: 1.3rem;">Certified Gym Trainers &amp; Instructors</h2>
+        <button id="btn-add-trainer" class="btn btn-cyan">
+          <span>➕</span> Add New Trainer
+        </button>
+      </div>
+      <div id="trainers-grid-container" class="trainers-grid">
+        <!-- Rendered by app.js -->
+      </div>
+    </section>
+
+    <!-- Tab 5: Analytics & Revenue -->
+    <section id="tab-analytics" class="tab-pane">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-bottom: 24px;">
+        <div class="panel-card">
+          <h3><span>💳</span> Revenue by Membership Plan</h3>
+          <div style="height: 260px;">
+            <canvas id="plan-revenue-chart"></canvas>
+          </div>
+        </div>
+        <div class="panel-card">
+          <h3><span>📊</span> Membership Status Breakdown</h3>
+          <div style="height: 260px;">
+            <canvas id="status-ratio-chart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3><span>📑</span> Administrative Summary &amp; Export Options</h3>
+          <div style="display: flex; gap: 10px;">
+            <button id="btn-download-txt-report" class="btn btn-secondary">
+              <span>📄</span> Download gym_report.txt
+            </button>
+            <button id="btn-download-csv" class="btn btn-emerald">
+              <span>📊</span> Export Members CSV
+            </button>
+          </div>
+        </div>
+        <pre id="raw-report-preview" style="background: var(--bg-surface-elevated); padding: 18px; border-radius: var(--radius-md); font-family: var(--font-mono); font-size: 0.8rem; overflow-x: auto; color: #a5f3fc; border: 1px solid var(--border-subtle);"></pre>
+      </div>
+    </section>
+
+    <!-- Tab 6: OOP Architecture & Viva Guide -->
+    <section id="tab-oop-guide" class="tab-pane">
+      <div class="panel-card">
+        <h3><span>🎓</span> Academic OOP Concepts Implementation Matrix</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">
+          This project was structured specifically to showcase the <strong>Five Core Pillars of Object-Oriented Programming (OOP)</strong> as required for academic evaluation:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px;">
+          
+          <div style="background: var(--bg-surface-elevated); padding: 18px; border-radius: var(--radius-md); border-left: 4px solid var(--gold-accent);">
+            <h4 style="color: var(--gold-accent); margin-bottom: 8px;">1. Abstraction (Pure Virtual Classes)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">
+              Hiding complex implementation details behind clean, mandatory interfaces.
+            </p>
+            <code style="font-family: var(--font-mono); font-size: 0.78rem; background: rgba(0,0,0,0.4); padding: 6px 10px; border-radius: 4px; display: block; color: #fde68a;">
+              class Person { virtual void displayInfo() = 0; };<br>
+              class MembershipPlan { virtual double getMonthlyFee() = 0; };
+            </code>
+          </div>
+
+          <div style="background: var(--bg-surface-elevated); padding: 18px; border-radius: var(--radius-md); border-left: 4px solid var(--emerald-accent);">
+            <h4 style="color: var(--emerald-accent); margin-bottom: 8px;">2. Encapsulation (Data Shielding)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">
+              Restricting direct variable manipulation via private specifiers and safe setters/getters.
+            </p>
+            <code style="font-family: var(--font-mono); font-size: 0.78rem; background: rgba(0,0,0,0.4); padding: 6px 10px; border-radius: 4px; display: block; color: #a7f3d0;">
+              private: vector&lt;Workout&gt; workouts; double totalFeesPaid;<br>
+              public: void updateWeight(double w); double calculateBMI();
+            </code>
+          </div>
+
+          <div style="background: var(--bg-surface-elevated); padding: 18px; border-radius: var(--radius-md); border-left: 4px solid var(--cyan-accent);">
+            <h4 style="color: var(--cyan-accent); margin-bottom: 8px;">3. Inheritance ("Is-A" Hierarchy)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">
+              Reusing common persona attributes and specialized membership subscription rules.
+            </p>
+            <code style="font-family: var(--font-mono); font-size: 0.78rem; background: rgba(0,0,0,0.4); padding: 6px 10px; border-radius: 4px; display: block; color: #a5f3fc;">
+              class Member : public Person { ... };<br>
+              class BasicPlan : public MembershipPlan { ... };
+            </code>
+          </div>
+
+          <div style="background: var(--bg-surface-elevated); padding: 18px; border-radius: var(--radius-md); border-left: 4px solid var(--purple-accent);">
+            <h4 style="color: var(--purple-accent); margin-bottom: 8px;">4. Polymorphism (Dynamic Dispatch)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">
+              Dynamic binding via virtual tables (`vtable`) allowing uniform invocation of derived actions.
+            </p>
+            <code style="font-family: var(--font-mono); font-size: 0.78rem; background: rgba(0,0,0,0.4); padding: 6px 10px; border-radius: 4px; display: block; color: #c4b5fd;">
+              for(auto &amp;m : members) m-&gt;displayInfo(); // Dynamic<br>
+              virtual ~Person() {} // Safe polymorphic cleanup
+            </code>
+          </div>
+
+          <div style="background: var(--bg-surface-elevated); padding: 18px; border-radius: var(--radius-md); border-left: 4px solid var(--rose-accent);">
+            <h4 style="color: var(--rose-accent); margin-bottom: 8px;">5. Composition ("Has-A" Relationship)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">
+              Building complex structures by embedding specialized sub-objects with controlled lifecycles.
+            </p>
+            <code style="font-family: var(--font-mono); font-size: 0.78rem; background: rgba(0,0,0,0.4); padding: 6px 10px; border-radius: 4px; display: block; color: #fecdd3;">
+              class Member { FitnessTracker tracker; };<br>
+              class FitnessTracker { vector&lt;Workout&gt; workouts; };
+            </code>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- MODALS -->
+
+  <!-- Modal 1: Register Member -->
+  <div id="modal-register-member" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2>Register New Gym Member</h2>
+        <button class="close-btn" data-close="modal-register-member">&times;</button>
+      </div>
+      <form id="form-register-member">
+        <div class="form-group">
+          <label for="reg-name">Full Name:</label>
+          <input type="text" id="reg-name" class="input-field" placeholder="e.g. Aditya Sharma" required>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label for="reg-age">Age (12 - 80):</label>
+            <input type="number" id="reg-age" class="input-field" min="12" max="80" value="23" required>
+          </div>
+          <div class="form-group">
+            <label for="reg-phone">Phone Number:</label>
+            <input type="tel" id="reg-phone" class="input-field" placeholder="9876543210" required>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label for="reg-height">Height (cm):</label>
+            <input type="number" id="reg-height" class="input-field" min="100" max="250" value="172" required>
+          </div>
+          <div class="form-group">
+            <label for="reg-weight">Weight (kg):</label>
+            <input type="number" id="reg-weight" class="input-field" min="30" max="200" step="0.5" value="68" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="reg-plan">Select Membership Plan:</label>
+          <select id="reg-plan" class="input-field">
+            <option value="1">Basic — ₹1,000/mo (Gym floor 6am-10am)</option>
+            <option value="2" selected>Premium — ₹2,000/mo (Full-day + Group classes + 10% PT off)</option>
+            <option value="3">Platinum — ₹3,500/mo (All-access + Sauna + Diet + 25% PT off)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="reg-months">Subscription Duration (Months):</label>
+          <input type="number" id="reg-months" class="input-field" min="1" max="24" value="3" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 10px;">
+          Confirm Registration &amp; Issue Pass
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 2: Member Digital VIP Pass & Profile -->
+  <div id="modal-member-pass" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2>Digital Membership Pass</h2>
+        <button class="close-btn" data-close="modal-member-pass">&times;</button>
+      </div>
+
+      <!-- Printable Member Pass Card -->
+      <div id="digital-pass-card" class="digital-pass-card">
+        <div class="pass-header">
+          <div class="pass-logo">⚡ FITZONE FITNESS</div>
+          <div id="pass-plan-badge" class="plan-badge badge-Platinum">PLATINUM VIP</div>
+        </div>
+        <div class="pass-body">
+          <div class="pass-name" id="pass-name">Aarav Patel</div>
+          <div class="pass-id" id="pass-id">MEMBERSHIP ID: #1001</div>
+        </div>
+        <div class="pass-grid">
+          <div class="pass-grid-item">
+            <div class="caption">Status</div>
+            <div class="val text-emerald" id="pass-status">ACTIVE</div>
+          </div>
+          <div class="pass-grid-item">
+            <div class="caption">Expires On</div>
+            <div class="val" id="pass-expiry">21-12-2026</div>
+          </div>
+          <div class="pass-grid-item">
+            <div class="caption">Current BMI</div>
+            <div class="val" id="pass-bmi">23.5 (Normal)</div>
+          </div>
+          <div class="pass-grid-item">
+            <div class="caption">Assigned Trainer</div>
+            <div class="val" id="pass-trainer">Vikram Singh</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px; justify-content: flex-end;">
+        <button id="btn-print-pass" class="btn btn-emerald">
+          <span>🖨️</span> Print Pass
+        </button>
+        <button class="btn btn-secondary" data-close="modal-member-pass">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Add Trainer -->
+  <div id="modal-add-trainer" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2>Add Certified Trainer</h2>
+        <button class="close-btn" data-close="modal-add-trainer">&times;</button>
+      </div>
+      <form id="form-add-trainer">
+        <div class="form-group">
+          <label for="trainer-name">Full Name:</label>
+          <input type="text" id="trainer-name" class="input-field" placeholder="e.g. Pooja Hegde" required>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label for="trainer-age">Age (18 - 65):</label>
+            <input type="number" id="trainer-age" class="input-field" min="18" max="65" value="27" required>
+          </div>
+          <div class="form-group">
+            <label for="trainer-phone">Phone:</label>
+            <input type="tel" id="trainer-phone" class="input-field" placeholder="9876543213" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="trainer-spec">Specialization:</label>
+          <input type="text" id="trainer-spec" class="input-field" placeholder="e.g. Crossfit &amp; Nutrition" required>
+        </div>
+        <div class="form-group">
+          <label for="trainer-rate">Hourly Rate (₹):</label>
+          <input type="number" id="trainer-rate" class="input-field" min="100" max="10000" step="50" value="500" required>
+        </div>
+        <button type="submit" class="btn btn-cyan" style="width: 100%; justify-content: center; margin-top: 10px;">
+          Add Trainer to Roster
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 4: Renew Membership -->
+  <div id="modal-renew-member" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2>Renew Membership Subscription</h2>
+        <button class="close-btn" data-close="modal-renew-member">&times;</button>
+      </div>
+      <form id="form-renew-member">
+        <input type="hidden" id="renew-member-id">
+        <div class="form-group">
+          <label>Renewing for Member:</label>
+          <div id="renew-member-name-label" style="font-weight: 700; color: var(--gold-accent);"></div>
+        </div>
+        <div class="form-group">
+          <label for="renew-plan-select">Choose Plan:</label>
+          <select id="renew-plan-select" class="input-field">
+            <option value="1">Basic (₹1,000/mo)</option>
+            <option value="2">Premium (₹2,000/mo)</option>
+            <option value="3">Platinum (₹3,500/mo)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="renew-months-input">Extension Months (1 - 24):</label>
+          <input type="number" id="renew-months-input" class="input-field" min="1" max="24" value="3" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 10px;">
+          Renew &amp; Process Payment
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 5: Assign Trainer -->
+  <div id="modal-assign-trainer" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2>Assign Personal Trainer</h2>
+        <button class="close-btn" data-close="modal-assign-trainer">&times;</button>
+      </div>
+      <form id="form-assign-trainer">
+        <input type="hidden" id="assign-member-id">
+        <div class="form-group">
+          <label>Member:</label>
+          <div id="assign-member-name-label" style="font-weight: 700; color: var(--gold-accent);"></div>
+        </div>
+        <div class="form-group">
+          <label for="assign-trainer-select">Select Trainer:</label>
+          <select id="assign-trainer-select" class="input-field" required></select>
+        </div>
+        <div id="assign-discount-preview" style="background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.25); padding: 12px; border-radius: var(--radius-md); font-size: 0.85rem; margin-bottom: 16px; color: #a5f3fc;">
+          <!-- Populated by app.js -->
+        </div>
+        <button type="submit" class="btn btn-cyan" style="width: 100%; justify-content: center;">
+          Confirm Trainer Assignment
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Center -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Application Script -->
+  <script src="app.js"></script>
+</body>
+</html>
